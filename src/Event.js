@@ -1,6 +1,8 @@
 import CustomError from './CustomError.js';
 
 class Event {
+  #discount;
+
   constructor(date) {
     this.checkDate(date);
     this.date = date;
@@ -13,12 +15,26 @@ class Event {
   }
 
   checkDdayEvent() {
-    let discount = 0;
+    this.resetDiscount();
+
     if (this.date >= 1 && this.date <= 25) {
-      discount = 1000 + (this.date - 1) * 100;
+      this.#discount = 1000 + (this.date - 1) * 100;
     }
 
-    return discount;
+    return this.#discount;
+  }
+
+  checkWeekEvent(count) {
+    this.resetDiscount();
+    this.#discount = count * 2023;
+
+    return this.#discount;
+  }
+
+  resetDiscount() {
+    this.#discount = 0;
+
+    return this.#discount;
   }
 }
 export default Event;
