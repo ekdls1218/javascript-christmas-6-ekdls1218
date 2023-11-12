@@ -107,5 +107,21 @@ class ApplyEvent {
 
     return countmMenus;
   }
+
+  checkBadgeEvent() {
+    const benefitAmount = this.calculateBenefitAmount();
+
+    if (benefitAmount >= 5000 && benefitAmount < 10000) {
+      return '별';
+    }
+
+    if (benefitAmount >= 10000 && benefitAmount < 20000) {
+      return '트리';
+    }
+
+    if (benefitAmount >= 20000) {
+      return '산타';
+    }
+  }
 }
 export default ApplyEvent;
