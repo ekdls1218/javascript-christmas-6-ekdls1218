@@ -32,5 +32,14 @@ class ApplyEvent {
 
     return this.#orderAmount;
   }
+
+  checkPresentEvent() {
+    let present = 0;
+    if (this.#orderAmount >= 120000) {
+      present = 25000;
+      return present;
+    }
+    return present;
+  }
 }
 export default ApplyEvent;
