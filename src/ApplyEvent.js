@@ -38,6 +38,35 @@ class ApplyEvent {
     return this.#orderAmount;
   }
 
+  calculateDiscountAmount() {
+    let sumPrice;
+    const discounArray = Object.values(this.#discount);
+    const discountAmount = discounArray.reduce((accumulator, discount) => {
+      sumPrice = accumulator + discount;
+
+      return sumPrice;
+    }, 0);
+
+    return discountAmount;
+  }
+
+  calculateBenefitAmount() {
+    const discountAmount = this.calculateDiscountAmount();
+    const present = this.checkPresentEvent();
+
+    const benefitAmount = discountAmount + present;
+
+    return benefitAmount;
+  }
+
+  calculatePayment() {
+    const discountAmount = this.calculateDiscountAmount();
+
+    const payment = this.#orderAmount - discountAmount;
+
+    return payment;
+  }
+
   checkPresentEvent() {
     let present = 0;
     if (this.#orderAmount >= 120000) {
