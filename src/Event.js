@@ -1,16 +1,14 @@
 import CustomError from './CustomError.js';
+import getDayOfWeek from './utils/utils.js';
 
 class Event {
   #date;
 
   #discount;
 
-  #dayOfWeek;
-
   constructor(date) {
     this.checkDate(date);
     this.#date = date;
-    this.getDayOfWeek(date);
   }
 
   checkDate(date) {
@@ -37,19 +35,14 @@ class Event {
   }
 
   checkSpecialEvent() {
+    const dayOfWeek = getDayOfWeek(this.#date);
     this.resetDiscount();
 
-    if (this.#dayOfWeek === 0 || this.#date === 25) {
+    if (dayOfWeek === 0 || this.#date === 25) {
       this.#discount = 1000;
     }
 
     return this.#discount;
-  }
-
-  getDayOfWeek(date) {
-    this.#dayOfWeek = new Date(2023, 11, date).getDay();
-
-    return this.#dayOfWeek;
   }
 
   resetDiscount() {

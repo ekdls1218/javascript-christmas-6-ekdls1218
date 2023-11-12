@@ -1,3 +1,6 @@
+import Event from './Event.js';
+import getDayOfWeek from './utils/utils.js';
+
 class ApplyEvent {
   #inputDate;
 
@@ -6,6 +9,8 @@ class ApplyEvent {
   #discountEvent;
 
   #orderAmount;
+
+  #discount = {};
 
   // 임시 구현
   menu = [
@@ -40,6 +45,38 @@ class ApplyEvent {
       return present;
     }
     return present;
+  }
+
+  benefitList() {
+    if (this.#orderAmount >= 10000) {
+      const count = this.checkWeek();
+
+      const dday = this.#discountEvent.checkDdayEvent();
+      const week = this.#discountEvent.checkWeekEvent(count);
+      const special = this.#discountEvent.checkSpecialEvent();
+
+      this.#discount = { dday, week, special };
+    }
+    return this.#discount;
+  }
+
+  checkWeek() {
+    let count = 0;
+    const dayOfWeek = getDayOfWeek(this.#inputDate);
+
+    if (dayOfWeek === 5 || dayOfWeek === 6) {
+      count = this.countmenu('main');
+      return count;
+    }
+
+    count = this.countmenu('dessert');
+    return count;
+  }
+
+  countmenu(type) {
+    const countmMenus = this.menu.filter((value) => value.type === type).length;
+
+    return countmMenus;
   }
 }
 export default ApplyEvent;
