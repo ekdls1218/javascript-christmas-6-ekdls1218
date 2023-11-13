@@ -6,8 +6,6 @@ class ApplyEvent {
 
   #inputMenu;
 
-  #discountEvent;
-
   #orderAmount;
 
   #discount = {};
@@ -24,12 +22,12 @@ class ApplyEvent {
     this.#inputDate = inputDate;
     this.#inputMenu = inputMenu;
     this.#orderAmount = this.calculateOrderAmount();
-    this.#discountEvent = new Event(inputDate);
+    this.#discount = this.benefitList();
   }
 
   calculateOrderAmount() {
     let sumPrice;
-    this.#orderAmount = this.menu.reduce((accumulator, order) => {
+    this.#orderAmount = this.#inputMenu.reduce((accumulator, order) => {
       sumPrice = accumulator + order.price * order.count;
 
       return sumPrice;
@@ -40,8 +38,8 @@ class ApplyEvent {
 
   calculateDiscountAmount() {
     let sumPrice;
-    const discounArray = Object.values(this.#discount);
-    const discountAmount = discounArray.reduce((accumulator, discount) => {
+    const discountArray = Object.values(this.#discount);
+    const discountAmount = discountArray.reduce((accumulator, discount) => {
       sumPrice = accumulator + discount;
 
       return sumPrice;
@@ -78,11 +76,12 @@ class ApplyEvent {
 
   benefitList() {
     if (this.#orderAmount >= 10000) {
+      const discountEvent = new Event(this.#inputDate);
       const count = this.checkWeek();
 
-      const dday = this.#discountEvent.checkDdayEvent();
-      const week = this.#discountEvent.checkWeekEvent(count);
-      const special = this.#discountEvent.checkSpecialEvent();
+      const dday = discountEvent.checkDdayEvent();
+      const week = discountEvent.checkWeekEvent(count);
+      const special = discountEvent.checkSpecialEvent();
 
       this.#discount = { dday, week, special };
     }
@@ -94,34 +93,39 @@ class ApplyEvent {
     const dayOfWeek = getDayOfWeek(this.#inputDate);
 
     if (dayOfWeek === 5 || dayOfWeek === 6) {
-      count = this.countmenu('main');
+      count = this.countMenu('main');
+
       return count;
     }
 
-    count = this.countmenu('dessert');
+    count = this.countMenu('dessert');
+
     return count;
   }
 
-  countmenu(type) {
-    const countmMenus = this.menu.filter((value) => value.type === type).length;
+  countMenu(type) {
+    const typeMenus = this.#inputMenu.filter((value) => value.type === type);
 
-    return countmMenus;
+    let count;
+    const typeCount = typeMenus.reduce((accumulator, menuType) => {
+      count = accumulator + menuType.count;
+
+      return count;
+    }, 0);
+
+    return typeCount;
   }
 
   checkBadgeEvent() {
     const benefitAmount = this.calculateBenefitAmount();
 
-    if (benefitAmount >= 5000 && benefitAmount < 10000) {
-      return '별';
-    }
+    if (benefitAmount >= 5000 && benefitAmount < 10000) return '별';
 
-    if (benefitAmount >= 10000 && benefitAmount < 20000) {
-      return '트리';
-    }
+    if (benefitAmount >= 10000 && benefitAmount < 20000) return '트리';
 
-    if (benefitAmount >= 20000) {
-      return '산타';
-    }
+    if (benefitAmount >= 20000) return '산타';
+
+    return '없음';
   }
 }
 export default ApplyEvent;
