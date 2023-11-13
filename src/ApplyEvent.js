@@ -1,5 +1,7 @@
 import Event from './Event.js';
 import getDayOfWeek from './utils/utils.js';
+import { STRINGS, PRESENT, BADGE } from './constants/strings.js';
+import PROMPT from './constants/prompt.js';
 
 class ApplyEvent {
   #inputDate;
@@ -67,15 +69,15 @@ class ApplyEvent {
 
   checkPresentEvent() {
     let present = 0;
-    if (this.#orderAmount >= 120000) {
-      present = 25000;
+    if (this.#orderAmount >= PRESENT.CONDITION) {
+      present = PRESENT.PRICE;
       return present;
     }
     return present;
   }
 
   benefitList() {
-    if (this.#orderAmount >= 10000) {
+    if (this.#orderAmount >= STRINGS.ORDER_AMOUNT_CONDITION) {
       const discountEvent = new Event(this.#inputDate);
       const count = this.checkWeek();
 
@@ -92,7 +94,7 @@ class ApplyEvent {
     let count = 0;
     const dayOfWeek = getDayOfWeek(this.#inputDate);
 
-    if (dayOfWeek === 5 || dayOfWeek === 6) {
+    if (dayOfWeek === STRINGS.FRIDAY || dayOfWeek === STRINGS.SATURDAY) {
       count = this.countMenu('main');
 
       return count;
@@ -119,13 +121,13 @@ class ApplyEvent {
   checkBadgeEvent() {
     const benefitAmount = this.calculateBenefitAmount();
 
-    if (benefitAmount >= 5000 && benefitAmount < 10000) return '별';
+    if (benefitAmount >= BADGE.SANTA_CONDITION) return PROMPT.BADGE_SANTA;
 
-    if (benefitAmount >= 10000 && benefitAmount < 20000) return '트리';
+    if (benefitAmount >= BADGE.TREE_CONDITION) return PROMPT.BADGE_TREE;
 
-    if (benefitAmount >= 20000) return '산타';
+    if (benefitAmount >= BADGE.STAR_CONDITION) return PROMPT.BADGE_STAR;
 
-    return '없음';
+    return PROMPT.NOTHING;
   }
 }
 export default ApplyEvent;

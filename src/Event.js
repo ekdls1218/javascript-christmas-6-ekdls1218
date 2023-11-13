@@ -1,5 +1,6 @@
 import CustomError from './CustomError.js';
 import getDayOfWeek from './utils/utils.js';
+import { STRINGS, DDAY, WEEK, SPECIAL } from './constants/strings.js';
 
 class Event {
   #date;
@@ -12,7 +13,7 @@ class Event {
   }
 
   checkDate(date) {
-    if (date < 1 || date > 31) {
+    if (date < STRINGS.EVENT_START_date || date > STRINGS.EVENT_END_date) {
       throw new CustomError('날짜를 다시 입력해주세요.');
     }
   }
@@ -20,8 +21,8 @@ class Event {
   checkDdayEvent() {
     this.resetDiscount();
 
-    if (this.#date >= 1 && this.#date <= 25) {
-      this.#discount = 1000 + (this.#date - 1) * 100;
+    if (this.#date >= DDAY.START_DATE && this.#date <= DDAY.END_DATE) {
+      this.#discount = DDAY.START_DISCOUNT + (this.#date - 1) * DDAY.INCREASE;
     }
 
     return this.#discount;
@@ -29,7 +30,7 @@ class Event {
 
   checkWeekEvent(count) {
     this.resetDiscount();
-    this.#discount = count * 2023;
+    this.#discount = count * WEEK.DISCOUNT;
 
     return this.#discount;
   }
@@ -38,8 +39,8 @@ class Event {
     const dayOfWeek = getDayOfWeek(this.#date);
     this.resetDiscount();
 
-    if (dayOfWeek === 0 || this.#date === 25) {
-      this.#discount = 1000;
+    if (dayOfWeek === STRINGS.SUNDAY || this.#date === SPECIAL.DATE) {
+      this.#discount = SPECIAL.DISCOUNT;
     }
 
     return this.#discount;
