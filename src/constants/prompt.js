@@ -1,4 +1,4 @@
-import STRINGS from './strings.js';
+import { STRINGS } from './strings.js';
 
 const PROMPT = Object.freeze({
   INTRODUCE: `안녕하세요! 우테코 식당 ${STRINGS.MONTH} 이벤트 플래너입니다.`,
