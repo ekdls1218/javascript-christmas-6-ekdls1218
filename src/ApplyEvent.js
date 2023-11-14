@@ -12,14 +12,6 @@ class ApplyEvent {
 
   #discount = {};
 
-  // 임시 구현
-  menu = [
-    { name: '티본스테이크', price: 55000, type: 'main', count: 1 },
-    { name: '바비큐립', price: 54000, type: 'main', count: 1 },
-    { name: '초코케이크', price: 15000, type: 'dessert', count: 2 },
-    { name: '제로콜라', price: 3000, type: 'drink', count: 1 },
-  ];
-
   constructor(inputDate, inputMenu) {
     this.#inputDate = inputDate;
     this.#inputMenu = inputMenu;
@@ -39,22 +31,22 @@ class ApplyEvent {
   }
 
   calculateDiscountAmount() {
-    let sumPrice;
-    const discountArray = Object.values(this.#discount);
-    const discountAmount = discountArray.reduce((accumulator, discount) => {
-      sumPrice = accumulator + discount;
+    const benefitAmount = this.calculateBenefitAmount();
+    const present = this.checkPresentEvent();
 
-      return sumPrice;
-    }, 0);
+    const discountAmount = benefitAmount - present;
 
     return discountAmount;
   }
 
   calculateBenefitAmount() {
-    const discountAmount = this.calculateDiscountAmount();
-    const present = this.checkPresentEvent();
+    const discountList = this.benefitList();
+    let sumPrice;
+    const benefitAmount = discountList.reduce((accumulator, discount) => {
+      sumPrice = accumulator + discount.discount;
 
-    const benefitAmount = discountAmount + present;
+      return sumPrice;
+    }, 0);
 
     return benefitAmount;
   }
@@ -78,19 +70,58 @@ class ApplyEvent {
 
   benefitList() {
     if (this.#orderAmount >= STRINGS.ORDER_AMOUNT_CONDITION) {
-      const discountEvent = new Event(this.#inputDate);
-      const count = this.checkWeek();
+      const discountPrice = this.loadEvent();
+      const combineList = this.combineEvent(discountPrice);
 
-      const dday = discountEvent.checkDdayEvent();
-      const week = discountEvent.checkWeekEvent(count);
-      const special = discountEvent.checkSpecialEvent();
+      this.#discount = combineList.filter((value) => value.discount !== 0);
 
-      this.#discount = { dday, week, special };
+      return this.#discount;
     }
+
     return this.#discount;
   }
 
-  checkWeek() {
+  loadEvent() {
+    const discountEvent = new Event(this.#inputDate);
+    const weekdayCount = this.checkWeekday();
+    const weekendCount = this.checkWeekend();
+
+    const dday = discountEvent.checkDdayEvent();
+    const weekday = discountEvent.checkWeekEvent(weekdayCount);
+    const weekend = discountEvent.checkWeekEvent(weekendCount);
+    const special = discountEvent.checkSpecialEvent();
+    const present = this.checkPresentEvent();
+
+    const discountPrice = [dday, weekday, weekend, special, present];
+
+    return discountPrice;
+  }
+
+  combineEvent(discountPrice) {
+    const eventName = PROMPT.EVENT;
+    const list = [];
+
+    eventName.map((key, i) =>
+      list.push({ name: key, discount: discountPrice[i] }),
+    );
+
+    return list;
+  }
+
+  checkWeekday() {
+    let count = 0;
+    const dayOfWeek = getDayOfWeek(this.#inputDate);
+
+    if (dayOfWeek >= STRINGS.SUNDAY && dayOfWeek <= STRINGS.THURSDAY) {
+      count = this.countMenu('dessert');
+
+      return count;
+    }
+
+    return count;
+  }
+
+  checkWeekend() {
     let count = 0;
     const dayOfWeek = getDayOfWeek(this.#inputDate);
 
@@ -99,8 +130,6 @@ class ApplyEvent {
 
       return count;
     }
-
-    count = this.countMenu('dessert');
 
     return count;
   }
