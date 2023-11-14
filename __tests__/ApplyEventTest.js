@@ -63,20 +63,20 @@ describe('countMenu() 메서드 테스트', () => {
 
 describe('checkWeek() 메서드 테스트', () => {
   test.each([3, 4, 5, 6, 7])('평일이면 디저트 할인', (dateInput) => {
-    const checkWeek = new ApplyEvent(dateInput, input).checkWeek();
+    const checkWeekday = new ApplyEvent(dateInput, input).checkWeekday();
 
-    expect(checkWeek).toEqual(2);
+    expect(checkWeekday).toEqual(2);
   });
 
   test.each([8, 9])('주말이면 메인 할인', (dateInput) => {
-    const checkWeek = new ApplyEvent(dateInput, input).checkWeek();
+    const checkWeekend = new ApplyEvent(dateInput, input).checkWeekend();
 
-    expect(checkWeek).toEqual(2);
+    expect(checkWeekend).toEqual(2);
   });
 });
 
 describe('benefitList() 메서드 테스트', () => {
-  test('총 주문 금액이 10000원 미만일 때', () => {
+  test('총 주문 금액이 10000원 미만일 때 빈 배열 리턴', () => {
     const lessInput = [
       { name: '아이스크림', price: 5000, type: 'dessert', count: 1 },
       { name: '제로콜라', price: 3000, type: 'drink', count: 1 },
@@ -84,13 +84,46 @@ describe('benefitList() 메서드 테스트', () => {
 
     const lessOrderAmount = new ApplyEvent(25, lessInput).benefitList();
 
-    expect(lessOrderAmount).toEqual({});
+    expect(lessOrderAmount).toEqual([]);
   });
 
-  test('총 주문 금액이 10000원 이상일 때', () => {
+  test('총 주문 금액이 10000원 이상일 때 할인 금액이 0인 내역 삭제 후 리턴', () => {
+    const output = [
+      { name: '크리스마스 디데이 할인:', discount: 3300 },
+      { name: '평일 할인:', discount: 4046 },
+      { name: '특별 할인:', discount: 1000 },
+      { name: '증정 이벤트:', discount: 25000 },
+    ];
+
     const benefitList = applyEvent.benefitList();
 
-    expect(benefitList).toEqual({ dday: 3300, special: 1000, week: 4046 });
+    expect(benefitList).toEqual(output);
+  });
+});
+
+describe('loadEvent() 메서드 테스트', () => {
+  test('혜택 금액 내역 배열 생성 테스트', () => {
+    const output = [3300, 4046, 0, 1000, 25000];
+
+    const loadEvent = applyEvent.loadEvent();
+
+    expect(loadEvent).toEqual(output);
+  });
+});
+
+describe('combineEvent() 메서드 테스트', () => {
+  test('혜택 메시지 내역 배열과 혜택 금액 내역 배열 합치기 테스트', () => {
+    const output = [
+      { name: '크리스마스 디데이 할인:', discount: 3300 },
+      { name: '평일 할인:', discount: 4046 },
+      { name: '주말 할인:', discount: 0 },
+      { name: '특별 할인:', discount: 1000 },
+      { name: '증정 이벤트:', discount: 25000 },
+    ];
+
+    const combineList = applyEvent.benefitList();
+
+    expect(combineList).toEqual(output);
   });
 });
 
