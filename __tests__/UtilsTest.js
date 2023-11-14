@@ -1,4 +1,4 @@
-import getDayOfWeek from '../src/utils/utils.js';
+import { getDayOfWeek } from '../src/utils/utils.js';
 
 test.each([
   [3, 0],

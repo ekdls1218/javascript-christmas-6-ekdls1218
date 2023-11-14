@@ -113,6 +113,8 @@ describe('loadEvent() 메서드 테스트', () => {
 
 describe('combineEvent() 메서드 테스트', () => {
   test('혜택 메시지 내역 배열과 혜택 금액 내역 배열 합치기 테스트', () => {
+    const combineInput = [3300, 4046, 0, 1000, 25000];
+
     const output = [
       { name: '크리스마스 디데이 할인:', discount: 3300 },
       { name: '평일 할인:', discount: 4046 },
@@ -121,7 +123,7 @@ describe('combineEvent() 메서드 테스트', () => {
       { name: '증정 이벤트:', discount: 25000 },
     ];
 
-    const combineList = applyEvent.benefitList();
+    const combineList = ApplyEvent.combineEvent(combineInput);
 
     expect(combineList).toEqual(output);
   });
