@@ -12,6 +12,13 @@ const STRINGS = Object.freeze({
   THURSDAY: 4,
   FRIDAY: 5,
   SATURDAY: 6,
+
+  COMMA: ',',
+  HYPHEN: '-',
+
+  REGEX_DATE: /[^0-9]/,
+  REGEX_MENU_FORM: /[가-힣]-\d{1,2}$/,
+  REGEX_MENU_COUNT: /[^1-9]/,
 });
 
 const DDAY = Object.freeze({

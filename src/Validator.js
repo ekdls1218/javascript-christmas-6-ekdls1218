@@ -1,5 +1,6 @@
 import CustomError from './CustomError.js';
 import ERROR from './constants/error.js';
+import { STRINGS } from './constants/strings.js';
 
 const Validator = {
   validDate(date) {
@@ -18,13 +19,13 @@ const Validator = {
   },
 
   isBetweenDate(date) {
-    if (date < 1 || date > 31) {
+    if (date < STRINGS.EVENT_START_date || date > STRINGS.EVENT_END_date) {
       throw CustomError.date(ERROR.INVALID_DATE);
     }
   },
 
   isNotNumber(date) {
-    if (/[^0-9]/.test(date)) {
+    if (STRINGS.REGEX_DATE.test(date)) {
       throw CustomError.date(ERROR.INVALID_DATE);
     }
   },
@@ -76,7 +77,7 @@ const Validator = {
     const eachInput = input.split(',');
 
     eachInput.forEach((element) => {
-      if (!/[가-힣]-\d{1,2}$/.test(element)) {
+      if (!STRINGS.REGEX_MENU_FORM.test(element)) {
         throw CustomError.menu(ERROR.INVALID_ORDER);
       }
     });
@@ -84,7 +85,7 @@ const Validator = {
 
   isMenuCount(order) {
     order.forEach((element) => {
-      if (/[^1-9]/.test(element.count)) {
+      if (STRINGS.REGEX_MENU_COUNT.test(element.count)) {
         throw CustomError.menu(ERROR.INVALID_ORDER);
       }
     });
