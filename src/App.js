@@ -27,6 +27,7 @@ class App {
     this.printPresent();
     this.printBenefitList();
     this.printTotalBenefit();
+    this.printPayment();
   }
 
   async inputDate() {
@@ -117,6 +118,13 @@ class App {
 
     OutputView.print(PROMPT.TOTAL_BENEFIT);
     OutputView.printPrice(totalBenefit);
+  }
+
+  printPayment() {
+    const payment = this.#applyEvent.calculatePayment();
+
+    OutputView.print(PROMPT.PAYMENT);
+    OutputView.printPrice(payment);
   }
 }
 
