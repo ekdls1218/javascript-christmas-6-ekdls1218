@@ -25,6 +25,7 @@ class App {
     this.printOrderSheet();
     this.printOrderPrice();
     this.printPresent();
+    this.printBenefitList();
   }
 
   async inputDate() {
@@ -92,6 +93,22 @@ class App {
     }
 
     return OutputView.print(PROMPT.PRESENT);
+  }
+
+  printBenefitList() {
+    const benefitList = this.#applyEvent.benefitList();
+
+    OutputView.print(PROMPT.BENEFIT);
+
+    if (benefitList.length === 0) {
+      return OutputView.print(PROMPT.NOTHING);
+    }
+
+    const eachBenefit = benefitList.forEach((value) => {
+      OutputView.printBenefit(value.name, value.discount);
+    });
+
+    return eachBenefit;
   }
 }
 
