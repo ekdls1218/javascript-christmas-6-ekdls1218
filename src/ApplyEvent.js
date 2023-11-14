@@ -73,7 +73,7 @@ class ApplyEvent {
 
     if (orderAmount >= STRINGS.ORDER_AMOUNT_CONDITION) {
       const discountPrice = this.loadEvent();
-      const combineList = this.combineEvent(discountPrice);
+      const combineList = ApplyEvent.combineEvent(discountPrice);
 
       discountList = combineList.filter((value) => value.discount !== 0);
 
@@ -99,7 +99,7 @@ class ApplyEvent {
     return discountPrice;
   }
 
-  combineEvent(discountPrice) {
+  static combineEvent(discountPrice) {
     const eventName = PROMPT.EVENT;
     const list = [];
 

@@ -42,21 +42,21 @@ class App {
 
     // 에러 처리
 
-    this.#orderSheet = this.orderMenu(inputOrderMenu);
+    this.#orderSheet = App.orderMenu(inputOrderMenu);
   }
 
-  orderMenu(inputOrderMenu) {
+  static orderMenu(inputOrderMenu) {
     const commaSeparate = inputOrderMenu.split(',');
 
     const order = [];
     commaSeparate.forEach((eachMenu) => {
-      order.push(...this.refineOrder(eachMenu));
+      order.push(...App.refineOrder(eachMenu));
     });
 
     return order;
   }
 
-  refineOrder(eachMenu) {
+  static refineOrder(eachMenu) {
     const hyphenSeparate = eachMenu.split('-');
 
     const orderFiltering = menu.filter(
