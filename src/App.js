@@ -1,7 +1,8 @@
 import ApplyEvent from './ApplyEvent.js';
 import InputView from './InputView.js';
 import OutputView from './OutputView.js';
-import menu from './constants/menu.js';
+import Validator from './Validator.js';
+import MENU from './constants/menu.js';
 import PROMPT from './constants/prompt.js';
 
 class App {
@@ -32,9 +33,19 @@ class App {
   }
 
   async inputDate() {
-    this.#visitDate = await InputView.readDate();
+    let input;
+    do {
+      try {
+        input = await InputView.readDate();
+        Validator.validDate(input);
+      } catch (error) {
+        OutputView.print(error.message);
+        input = null;
+      }
+    } while (!input);
+    this.#visitDate = input;
 
-    // 에러처리
+    return this.#visitDate;
   }
 
   async inputMenu() {
@@ -59,7 +70,7 @@ class App {
   static refineOrder(eachMenu) {
     const hyphenSeparate = eachMenu.split('-');
 
-    const orderFiltering = menu.filter(
+    const orderFiltering = MENU.filter(
       (vlaue) => vlaue.name === hyphenSeparate[0],
     );
 
