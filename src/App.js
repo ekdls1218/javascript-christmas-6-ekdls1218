@@ -21,6 +21,8 @@ class App {
     await this.inputDate();
     await this.inputMenu();
     this.#applyEvent = new ApplyEvent(this.#visitDate, this.#orderSheet);
+    OutputView.previewPrint(this.#visitDate);
+    this.printOrderSheet();
   }
 
   async inputDate() {
@@ -61,6 +63,14 @@ class App {
     }));
 
     return insertCount;
+  }
+
+  printOrderSheet() {
+    OutputView.print(PROMPT.ORDER_MENU);
+
+    this.#orderSheet.forEach((eachMenu) => {
+      OutputView.printOrderMenu(eachMenu.name, eachMenu.count);
+    });
   }
 }
 
