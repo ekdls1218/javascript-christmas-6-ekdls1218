@@ -3,4 +3,11 @@ const getDayOfWeek = (date) => {
 
   return dayOfWeek;
 };
-export default getDayOfWeek;
+
+const thousandsComma = (price) => {
+  const comma = Number(price.toFixed(1)).toLocaleString();
+
+  return comma;
+};
+
+export { getDayOfWeek, thousandsComma };

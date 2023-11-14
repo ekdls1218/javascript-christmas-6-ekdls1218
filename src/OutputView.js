@@ -1,6 +1,7 @@
 import { Console } from '@woowacourse/mission-utils';
 import { STRINGS } from './constants/strings.js';
 import PROMPT from './constants/prompt.js';
+import { thousandsComma } from './utils/utils.js';
 
 const OutputView = {
   print(message) {
@@ -16,11 +17,21 @@ const OutputView = {
   },
 
   printPrice(price) {
-    Console.print(`${price}원`);
+    const refinePrice = thousandsComma(price);
+
+    Console.print(`${refinePrice}원`);
+  },
+
+  printMinusPrice(price) {
+    const refinePrice = thousandsComma(price);
+
+    Console.print(`-${refinePrice}원`);
   },
 
   printBenefit(name, discount) {
-    Console.print(`${name} ${discount}원`);
+    const refineDiscount = thousandsComma(discount);
+
+    Console.print(`${name} -${refineDiscount}원`);
   },
 };
 export default OutputView;

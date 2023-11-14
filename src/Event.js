@@ -1,5 +1,5 @@
 import CustomError from './CustomError.js';
-import getDayOfWeek from './utils/utils.js';
+import { getDayOfWeek } from './utils/utils.js';
 import { STRINGS, DDAY, WEEK, SPECIAL } from './constants/strings.js';
 
 class Event {

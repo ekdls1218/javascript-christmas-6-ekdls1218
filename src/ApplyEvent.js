@@ -1,5 +1,5 @@
 import Event from './Event.js';
-import getDayOfWeek from './utils/utils.js';
+import { getDayOfWeek } from './utils/utils.js';
 import { STRINGS, PRESENT, BADGE } from './constants/strings.js';
 import PROMPT from './constants/prompt.js';
 
