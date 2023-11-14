@@ -1,4 +1,3 @@
-import CustomError from './CustomError.js';
 import { getDayOfWeek } from './utils/utils.js';
 import { STRINGS, DDAY, WEEK, SPECIAL } from './constants/strings.js';
 
@@ -8,14 +7,7 @@ class Event {
   #discount;
 
   constructor(date) {
-    this.checkDate(date);
     this.#date = date;
-  }
-
-  checkDate(date) {
-    if (date < STRINGS.EVENT_START_date || date > STRINGS.EVENT_END_date) {
-      throw new CustomError('날짜를 다시 입력해주세요.');
-    }
   }
 
   checkDdayEvent() {
