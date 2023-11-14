@@ -24,6 +24,7 @@ class App {
     OutputView.previewPrint(this.#visitDate);
     this.printOrderSheet();
     this.printOrderPrice();
+    this.printPresent();
   }
 
   async inputDate() {
@@ -79,6 +80,18 @@ class App {
 
     OutputView.print(PROMPT.TOTAL_AMOUNT);
     OutputView.printPrice(orderAmount);
+  }
+
+  printPresent() {
+    const present = this.#applyEvent.checkPresentEvent();
+
+    OutputView.print(PROMPT.PRESENT_MENU);
+
+    if (present === 0) {
+      return OutputView.print(PROMPT.NOTHING);
+    }
+
+    return OutputView.print(PROMPT.PRESENT);
   }
 }
 
