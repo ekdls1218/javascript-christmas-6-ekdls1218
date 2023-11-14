@@ -8,26 +8,21 @@ class ApplyEvent {
 
   #inputMenu;
 
-  #orderAmount;
-
-  #discount = {};
-
   constructor(inputDate, inputMenu) {
     this.#inputDate = inputDate;
     this.#inputMenu = inputMenu;
-    this.#orderAmount = this.calculateOrderAmount();
-    this.#discount = this.benefitList();
   }
 
   calculateOrderAmount() {
     let sumPrice;
-    this.#orderAmount = this.#inputMenu.reduce((accumulator, order) => {
+
+    const orderAmount = this.#inputMenu.reduce((accumulator, order) => {
       sumPrice = accumulator + order.price * order.count;
 
       return sumPrice;
     }, 0);
 
-    return this.#orderAmount;
+    return orderAmount;
   }
 
   calculateDiscountAmount() {
@@ -42,6 +37,7 @@ class ApplyEvent {
   calculateBenefitAmount() {
     const discountList = this.benefitList();
     let sumPrice;
+
     const benefitAmount = discountList.reduce((accumulator, discount) => {
       sumPrice = accumulator + discount.discount;
 
@@ -52,16 +48,19 @@ class ApplyEvent {
   }
 
   calculatePayment() {
+    const orderAmount = this.calculateOrderAmount();
     const discountAmount = this.calculateDiscountAmount();
 
-    const payment = this.#orderAmount - discountAmount;
+    const payment = orderAmount - discountAmount;
 
     return payment;
   }
 
   checkPresentEvent() {
     let present = 0;
-    if (this.#orderAmount >= PRESENT.CONDITION) {
+    const orderAmount = this.calculateOrderAmount();
+
+    if (orderAmount >= PRESENT.CONDITION) {
       present = PRESENT.PRICE;
       return present;
     }
@@ -69,16 +68,19 @@ class ApplyEvent {
   }
 
   benefitList() {
-    if (this.#orderAmount >= STRINGS.ORDER_AMOUNT_CONDITION) {
+    let discountList = [];
+    const orderAmount = this.calculateOrderAmount();
+
+    if (orderAmount >= STRINGS.ORDER_AMOUNT_CONDITION) {
       const discountPrice = this.loadEvent();
       const combineList = this.combineEvent(discountPrice);
 
-      this.#discount = combineList.filter((value) => value.discount !== 0);
+      discountList = combineList.filter((value) => value.discount !== 0);
 
-      return this.#discount;
+      return discountList;
     }
 
-    return this.#discount;
+    return discountList;
   }
 
   loadEvent() {
