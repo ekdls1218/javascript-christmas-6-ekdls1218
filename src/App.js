@@ -28,6 +28,7 @@ class App {
     this.printBenefitList();
     this.printTotalBenefit();
     this.printPayment();
+    this.printBadge();
   }
 
   async inputDate() {
@@ -125,6 +126,13 @@ class App {
 
     OutputView.print(PROMPT.PAYMENT);
     OutputView.printPrice(payment);
+  }
+
+  printBadge() {
+    const badge = this.#applyEvent.checkBadgeEvent();
+
+    OutputView.print(PROMPT.BADGE);
+    OutputView.print(badge);
   }
 }
 
