@@ -23,6 +23,7 @@ class App {
     this.#applyEvent = new ApplyEvent(this.#visitDate, this.#orderSheet);
     OutputView.previewPrint(this.#visitDate);
     this.printOrderSheet();
+    this.printOrderPrice();
   }
 
   async inputDate() {
@@ -71,6 +72,13 @@ class App {
     this.#orderSheet.forEach((eachMenu) => {
       OutputView.printOrderMenu(eachMenu.name, eachMenu.count);
     });
+  }
+
+  printOrderPrice() {
+    const orderAmount = this.#applyEvent.calculateOrderAmount();
+
+    OutputView.print(PROMPT.TOTAL_AMOUNT);
+    OutputView.printPrice(orderAmount);
   }
 }
 
