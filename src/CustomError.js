@@ -9,5 +9,9 @@ class CustomError extends Error {
   static date(message) {
     return new CustomError(message, ERROR.name.DATE);
   }
+
+  static menu(message) {
+    return new CustomError(message, ERROR.name.MENU);
+  }
 }
 export default CustomError;

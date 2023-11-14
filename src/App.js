@@ -49,11 +49,19 @@ class App {
   }
 
   async inputMenu() {
-    const inputOrderMenu = await InputView.readOrder();
+    do {
+      try {
+        const inputOrderMenu = await InputView.readOrder();
+        this.#orderSheet = App.orderMenu(inputOrderMenu);
 
-    // 에러 처리
+        Validator.validMenu(inputOrderMenu, this.#orderSheet);
+      } catch (error) {
+        OutputView.print(error.message);
+        this.#orderSheet = null;
+      }
+    } while (!this.#orderSheet);
 
-    this.#orderSheet = App.orderMenu(inputOrderMenu);
+    return this.#orderSheet;
   }
 
   static orderMenu(inputOrderMenu) {
@@ -61,7 +69,7 @@ class App {
 
     const order = [];
     commaSeparate.forEach((eachMenu) => {
-      order.push(...App.refineOrder(eachMenu));
+      order.push(...App.refineOrder(eachMenu.trim()));
     });
 
     return order;
