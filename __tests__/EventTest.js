@@ -38,7 +38,7 @@ describe('checkWeekEvent() 메서드 테스트', () => {
   test('평일/주말 할인 테스트', () => {
     const input = 10;
 
-    const week = new Event().checkWeekEvent(input);
+    const week = Event.checkWeekEvent(input);
 
     expect(week).toBe(20230);
   });
