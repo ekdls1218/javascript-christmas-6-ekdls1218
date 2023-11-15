@@ -1,6 +1,7 @@
 import CustomError from './CustomError.js';
 import ERROR from './constants/error.js';
 import { STRINGS } from './constants/strings.js';
+import { orderMenu } from './utils/utils.js';
 
 const Validator = {
   validDate(date) {
@@ -9,12 +10,12 @@ const Validator = {
     this.isNotNumber(date);
   },
 
-  validMenu(input, order) {
+  validMenu(order) {
     this.isNotMenu(order);
     this.isOnlyDrink(order);
     this.isOverMenu(order);
     this.isDuplicationMenu(order);
-    this.isDifferentInput(input);
+    this.isDifferentInput(order);
     this.isMenuCount(order);
   },
 
@@ -37,13 +38,17 @@ const Validator = {
   },
 
   isNotMenu(order) {
-    if (order.length === 0) {
+    const refineOrder = orderMenu(order);
+
+    if (refineOrder.length === 0) {
       throw CustomError.menu(ERROR.INVALID_ORDER);
     }
   },
 
   isOnlyDrink(order) {
-    const refineOrder = order.filter((value) => value.type !== 'drink');
+    const refineOrder = orderMenu(order).filter(
+      (value) => value.type !== 'drink',
+    );
 
     if (refineOrder.length === 0) {
       throw CustomError.menu(ERROR.INVALID_ORDER);
@@ -51,8 +56,10 @@ const Validator = {
   },
 
   isOverMenu(order) {
+    const refineOrder = orderMenu(order);
+
     let sumCount;
-    const menuCount = order.reduce((arr, menu) => {
+    const menuCount = refineOrder.reduce((arr, menu) => {
       sumCount = arr + menu.count;
       return sumCount;
     }, 0);
@@ -63,18 +70,20 @@ const Validator = {
   },
 
   isDuplicationMenu(order) {
-    const duplicationOrder = order.filter(
+    const refineOrder = orderMenu(order);
+
+    const duplicationOrder = refineOrder.filter(
       (filterValue, idx, callback) =>
         idx === callback.findIndex((value) => value.name === filterValue.name),
     );
 
-    if (duplicationOrder.length !== order.length) {
+    if (duplicationOrder.length !== refineOrder.length) {
       throw CustomError.menu(ERROR.INVALID_ORDER);
     }
   },
 
-  isDifferentInput(input) {
-    const eachInput = input.split(',');
+  isDifferentInput(order) {
+    const eachInput = order.split(',');
 
     eachInput.forEach((element) => {
       if (!STRINGS.REGEX_MENU_FORM.test(element)) {
@@ -84,7 +93,9 @@ const Validator = {
   },
 
   isMenuCount(order) {
-    order.forEach((element) => {
+    const refineOrder = orderMenu(order);
+
+    refineOrder.forEach((element) => {
       if (STRINGS.REGEX_MENU_COUNT.test(element.count)) {
         throw CustomError.menu(ERROR.INVALID_ORDER);
       }

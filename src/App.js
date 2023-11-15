@@ -2,8 +2,8 @@ import ApplyEvent from './ApplyEvent.js';
 import InputView from './InputView.js';
 import OutputView from './OutputView.js';
 import Validator from './Validator.js';
-import MENU from './constants/menu.js';
 import PROMPT from './constants/prompt.js';
+import { orderMenu } from './utils/utils.js';
 
 class App {
   #visitDate;
@@ -52,9 +52,8 @@ class App {
     do {
       try {
         const inputOrderMenu = await InputView.readOrder();
-        this.#orderSheet = App.orderMenu(inputOrderMenu);
-
-        Validator.validMenu(inputOrderMenu, this.#orderSheet);
+        Validator.validMenu(inputOrderMenu);
+        this.#orderSheet = orderMenu(inputOrderMenu);
       } catch (error) {
         OutputView.print(error.message);
         this.#orderSheet = null;
@@ -62,32 +61,6 @@ class App {
     } while (!this.#orderSheet);
 
     return this.#orderSheet;
-  }
-
-  static orderMenu(inputOrderMenu) {
-    const commaSeparate = inputOrderMenu.split(',');
-
-    const order = [];
-    commaSeparate.forEach((eachMenu) => {
-      order.push(...App.refineOrder(eachMenu.trim()));
-    });
-
-    return order;
-  }
-
-  static refineOrder(eachMenu) {
-    const hyphenSeparate = eachMenu.split('-');
-
-    const orderFiltering = MENU.filter(
-      (vlaue) => vlaue.name === hyphenSeparate[0],
-    );
-
-    const insertCount = orderFiltering.map((value) => ({
-      ...value,
-      count: Number(hyphenSeparate[1]),
-    }));
-
-    return insertCount;
   }
 
   printOrderSheet() {
