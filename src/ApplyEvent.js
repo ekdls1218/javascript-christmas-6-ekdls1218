@@ -89,8 +89,8 @@ class ApplyEvent {
     const weekendCount = this.checkWeekend();
 
     const dday = discountEvent.checkDdayEvent();
-    const weekday = discountEvent.checkWeekEvent(weekdayCount);
-    const weekend = discountEvent.checkWeekEvent(weekendCount);
+    const weekday = Event.checkWeekEvent(weekdayCount);
+    const weekend = Event.checkWeekEvent(weekendCount);
     const special = discountEvent.checkSpecialEvent();
     const present = this.checkPresentEvent();
 
