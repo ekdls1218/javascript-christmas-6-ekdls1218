@@ -21,6 +21,7 @@ class App {
     OutputView.print(PROMPT.INTRODUCE);
     await this.inputDate();
     await this.inputMenu();
+
     this.#applyEvent = new ApplyEvent(this.#visitDate, this.#orderSheet);
     OutputView.previewPrint(this.#visitDate);
     this.printOrderSheet();
