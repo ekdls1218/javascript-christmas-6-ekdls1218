@@ -110,7 +110,11 @@ class App {
     const totalBenefit = this.#applyEvent.calculateBenefitAmount();
 
     OutputView.print(PROMPT.TOTAL_BENEFIT);
-    OutputView.printMinusPrice(totalBenefit);
+    if (totalBenefit === 0) {
+      return OutputView.printPrice(totalBenefit);
+    }
+
+    return OutputView.printMinusPrice(totalBenefit);
   }
 
   printPayment() {
